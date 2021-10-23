@@ -1,0 +1,15 @@
+<div class="container-fluid mt-3">
+  <h1>Registracijos požymiai</h1>
+  <div class="row align-items-center my-4">
+    <div class="col-auto">
+      <label for="form-id" class="form-label fw-bold">Įveskite formos numerį:</label>
+    </div>
+    <div class="col-auto">
+      <input #formIdField id="form-id" type="number" class="form-control" >
+    </div>
+    <div class="col-auto">
+      <button type="button" (click)="formId = formIdField.value">Rodyti</button>
+    </div>
+  </div>
+  <app-registration-form [formId]="formId"></app-registration-form>
+</div>

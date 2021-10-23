@@ -1,0 +1,36 @@
+<h2 class="my-3">Forma Nr. {{ savedFormData.id }}</h2>
+<form #featuresForm="ngForm">
+  <table class="table table-bordered">
+    <thead class="table-secondary">
+      <tr>
+        <th class="align-middle">Registracijos požymiai</th>
+        <th class="align-middle">Reikšmė</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let feature of features">
+        <td class="align-middle">
+          {{ feature.text }}
+        </td>
+        <td class="align-middle">
+          <select [disabled]="!editMode" [(ngModel)]="feature.selectedOptionId" [ngModelOptions]="{standalone: true}" class="w-50">
+            <option value="0">&lt;Pasirinkite&gt;</option>
+            <option *ngFor="let option of feature.dropDownOptions" value="{{ option.id }}">
+              {{ option.text }}
+            </option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <button class="mx-1" type="button" [disabled]="editMode" (click)="editMode = true">
+    Koreguoti požymius
+  </button>
+  <button class="mx-1" type="button" [disabled]="!editMode" (click)="updateRecords(); editMode = false">
+    Saugoti pataisymus
+  </button>
+  <button class="mx-1" type="button" [disabled]="!editMode" (click)="setSavedValues(); editMode = false">
+    Atšaukti pataisymus
+  </button>
+</form>
