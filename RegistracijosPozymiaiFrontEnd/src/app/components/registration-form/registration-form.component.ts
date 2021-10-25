@@ -25,36 +25,34 @@ export class RegistrationFormComponent implements OnInit, OnChanges {
     this.formValuesService = formValuesService;
   }
 
-  ngOnInit(): void {
-    this.getFeatures();
+  async ngOnInit(): Promise<void> {
+    await this.getFeaturesAsync();
+    await this.getSavedFormDataAsync(parseInt(this.formId));
+    this.setSavedValues();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.getSavedFormData(parseInt(this.formId));
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    await this.getSavedFormDataAsync(parseInt(this.formId));
+    this.setSavedValues();
+    this.editMode = false;
   }
 
-  private getFeatures() {
-    this.featuresService.getFeatures().subscribe(featuresFromApi => {
-      this.features = featuresFromApi;
-      this.getSavedFormData(parseInt(this.formId));
-    });
+  private async getFeaturesAsync(): Promise<void> {
+    this.features = await this.featuresService.getFeatures().toPromise();
   }
 
-  private getSavedFormData(id: number) {
-    this.formValuesService.getData(id).subscribe(recordsFromApi => {
-      this.savedFormData = recordsFromApi;
-      this.setSavedValues();
-    });
+  private async getSavedFormDataAsync(id: number): Promise<void> {
+    this.savedFormData = await this.formValuesService.getData(id).toPromise();
   }
 
-  public setSavedValues() {
+  public setSavedValues(): void {
     this.features.forEach(feature => {
       let selectedOptionId = this.savedFormData.selectedValues[feature.id.toString()];
       feature.selectedOptionId = selectedOptionId ? selectedOptionId : 0;
     });
   }
 
-  public updateRecords() {
+  public async updateRecords(): Promise<void> {
     let selectedValues = {};
     this.features.forEach(feature => {
       if (feature.selectedOptionId)
@@ -62,6 +60,6 @@ export class RegistrationFormComponent implements OnInit, OnChanges {
     });
 
     this.savedFormData.selectedValues = selectedValues;
-    this.formValuesService.updateData(this.savedFormData, this.savedFormData.id).subscribe();
+    await this.formValuesService.updateData(this.savedFormData, this.savedFormData.id).toPromise();
   }
 }
