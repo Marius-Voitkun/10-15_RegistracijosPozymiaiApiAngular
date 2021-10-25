@@ -27,7 +27,6 @@ export class RegistrationFormComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.getFeatures();
-    this.getSavedFormData(parseInt(this.formId));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -37,6 +36,7 @@ export class RegistrationFormComponent implements OnInit, OnChanges {
   private getFeatures() {
     this.featuresService.getFeatures().subscribe(featuresFromApi => {
       this.features = featuresFromApi;
+      this.getSavedFormData(parseInt(this.formId));
     });
   }
 
